@@ -1,0 +1,1281 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>أهلاً بكم! - قوائم الطعام</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;700&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* GLOBAL STYLES & PAGE NAVIGATION */
+        :root {
+            /* Landing Page Colors (can be reused or overridden) */
+            --fayrouz-bg-landing: #e6dace;
+            --eatwell-bg-landing: #97b447;
+            --animation-duration-landing: 0.8s;
+
+            /* Fayrouz Brand Colors (from fayrouz final.html) */
+            --brand-beige-bg-solid: #F5EDE3;
+            --brand-terracotta-main: #B57450;
+            --brand-dark-brown: #4A3B31;
+            --brand-cream-content: #FFFFFF;
+            --brand-white-text: #FFFFFF;
+            --fayrouz-banner-height: 120px;
+            --fayrouz-header-main-height: 65px;
+            --fayrouz-header-secondary-height: 90px;
+            --fayrouz-border-radius-main: 10px;
+            --fayrouz-border-radius-items: 8px;
+
+            /* Eatwell Brand Colors (from eatwell.html) */
+            --eatwell-primary-green: #97b447;
+            --eatwell-secondary-mint: #c8e4b5;
+            --eatwell-dark-text: #333333;
+            --eatwell-light-text-on-green: #FFFFFF;
+            --eatwell-card-bg: #FFFFFF;
+            --eatwell-content-area-bg: #c3d2a5;
+            --eatwell-banner-height: 150px;
+            --eatwell-header-main-height: 65px;
+            --eatwell-header-secondary-height: 90px;
+            --eatwell-border-radius-main: 10px;
+            --eatwell-border-radius-items: 8px;
+            --item-image-square-size: 140px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html, body { /* Styles for the single HTML document */
+            height: 100%;
+            width: 100%;
+            overflow-x: hidden; /* Prevent horizontal scroll globally */
+            overflow-y: auto;   /* Allow vertical scroll if content exceeds viewport */
+            position: relative;
+             /* Default font, can be overridden by sections */
+            font-family: 'Tajawal', 'Cairo', sans-serif;
+        }
+
+        .page-section-container {
+            display: none; /* Hide all pages by default */
+            width: 100%;
+            min-height: 100vh; /* Ensure it takes at least full viewport height */
+        }
+
+        .page-section-container.active-page {
+            display: block; /* Show the active page */
+        }
+
+        /* Styles for landing page specifically when it's active */
+        #landingPage.active-page {
+            display: flex; /* As landing page used flex for its layout */
+            flex-direction: column;
+            overflow-y: hidden; /* Landing page itself is not meant to scroll */
+        }
+
+
+        /* --- START OF LANDING PAGE CSS --- */
+        #landingPage {
+            /* font-family set by .landing-section children */
+        }
+
+        #landingPage .landing-section { /* Renamed from .landing-section to avoid clash if used elsewhere */
+            height: 50vh;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-end;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+            background-size: cover;
+            background-position: center;
+        }
+
+        #landingPage .fayrouz-half {
+            background-color: var(--fayrouz-bg-landing);
+            font-family: 'Tajawal', sans-serif;
+            justify-content: space-between;
+            animation: slideInFromTopLanding var(--animation-duration-landing) ease-out forwards;
+        }
+
+        #landingPage .fayrouz-graphics {
+            width: 100%;
+            max-width: 300px;
+            position: relative;
+            top: 10px;
+            opacity: 0;
+            animation: fadeInGraphicsLanding 1s ease-out 0.5s forwards;
+        }
+
+        #landingPage .fayrouz-illustration {
+            width: 50%;
+            max-width: 120px;
+            display: block;
+            margin: 0 auto 5px;
+        }
+
+        #landingPage .fayrouz-calligraphy {
+            width: 100%;
+            max-width: 280px;
+            display: block;
+            margin: 0 auto;
+        }
+
+        #landingPage .eatwell-half {
+            background-color: var(--eatwell-bg-landing);
+            background-image: url('images/eatwell_bg_pattern.png');
+            background-repeat: repeat;
+            font-family: 'Cairo', sans-serif;
+            justify-content: flex-start;
+            padding-top: 70px;
+            animation: slideInFromBottomLanding var(--animation-duration-landing) ease-out forwards;
+        }
+
+        #landingPage .eatwell-logo-container {
+            text-align: center;
+            opacity: 0;
+            animation: fadeInGraphicsLanding 1s ease-out 0.5s forwards;
+        }
+
+        #landingPage .eatwell-main-logo {
+            width: 100px;
+            margin-bottom: 8px;
+        }
+
+        #landingPage .eatwell-title-text {
+            font-size: 1.8em;
+            font-weight: 700;
+            color: var(--eatwell-text-light);
+        }
+
+        #landingPage .eatwell-subtitle-text {
+            font-size: 0.8em;
+            color: var(--eatwell-text-light);
+            margin-top: -2px;
+        }
+
+        #landingPage .central-buttons-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        #landingPage .nav-button {
+            width: 130px;
+            height: 90px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+            opacity: 0;
+            animation: fadeInButtonsLanding 1s ease-out var(--animation-duration-landing) forwards;
+            position: relative;
+        }
+        #landingPage .nav-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.25);
+        }
+
+        #landingPage .fayrouz-nav-button { /* Renamed to avoid clash */
+            background-color: var(--fayrouz-bg-landing);
+            border-top-left-radius: 70px;
+            border-top-right-radius: 70px;
+            border-bottom-left-radius: 20px;
+            border-bottom-right-radius: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+            margin-bottom: -10px;
+            z-index: 1;
+        }
+        
+        #landingPage .fayrouz-nav-button .arrow {
+            font-size: 2.5em;
+            color: var(--eatwell-bg-landing);
+            line-height: 1;
+            font-weight: bold;
+        }
+
+        #landingPage .eatwell-nav-button { /* Renamed to avoid clash */
+            background-color: var(--eatwell-bg-landing);
+            border-bottom-left-radius: 70px;
+            border-bottom-right-radius: 70px;
+            border-top-left-radius: 20px;
+            border-top-right-radius: 20px;
+            box-shadow: 0 -5px 15px rgba(0,0,0,0.10) inset, 0 5px 15px rgba(0,0,0,0.15);
+        }
+
+        #landingPage .eatwell-nav-button .arrow {
+            font-size: 2.5em;
+            color: var(--fayrouz-bg-landing);
+            line-height: 1;
+            font-weight: bold;
+        }
+
+        #landingPage .footer {
+            background-color: #2c2c2c;
+            color: #f0f0f0;
+            text-align: center;
+            padding: 12px 0;
+            font-size: 0.85em;
+            position: fixed; /* Fixed for landing page context */
+            bottom: 0;
+            width: 100%;
+            z-index: 20;
+            opacity: 0;
+            animation: fadeInFooterLanding 1s ease-out calc(var(--animation-duration-landing) + 0.5s) forwards;
+        }
+        #landingPage .footer p { margin: 0; line-height: 1.5; }
+        #landingPage .footer a { color: #a0d2db; text-decoration: none; font-weight: 500; margin: 0 5px; }
+        #landingPage .footer a:hover { text-decoration: underline; }
+
+        @keyframes slideInFromTopLanding { from { transform: translateY(-100%); } to { transform: translateY(0); } }
+        @keyframes slideInFromBottomLanding { from { transform: translateY(100%); } to { transform: translateY(0); } }
+        @keyframes fadeInGraphicsLanding { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeInButtonsLanding {  from { opacity: 0; transform: scale(0.8); } to { opacity: 1; transform: scale(1); } }
+        @keyframes fadeInFooterLanding { from { opacity: 0; } to { opacity: 1; } }
+
+        @media (min-width: 600px) {
+            #landingPage .fayrouz-illustration { max-width: 150px; }
+            #landingPage .fayrouz-calligraphy { max-width: 350px; }
+            #landingPage .eatwell-main-logo { width: 120px; }
+            #landingPage .eatwell-title-text { font-size: 2.2em; }
+            #landingPage .eatwell-subtitle-text { font-size: 1em; }
+            #landingPage .nav-button { width: 160px; height: 110px; }
+            #landingPage .fayrouz-nav-button .arrow, #landingPage .eatwell-nav-button .arrow { font-size: 3em; }
+            #landingPage .footer { padding: 15px 0; font-size: 0.9em;}
+        }
+        /* --- END OF LANDING PAGE CSS --- */
+
+
+        /* --- START OF FAYROUZ MENU CSS (Scoped with #fayrouzMenuPage) --- */
+        #fayrouzMenuPage { /* Equivalent of former body styling */
+            font-family: 'Tajawal', sans-serif;
+            background-image: url('https://www.transparenttextures.com/patterns/wood-pattern.png');
+            background-color: var(--brand-dark-brown);
+            background-attachment: fixed;
+            color: var(--brand-dark-brown);
+            /* overscroll-behavior-y: contain; Applied to html/body now */
+            padding-bottom: 20px; /* If #fayrouzMenuPage is full height and scrolls */
+        }
+
+        #fayrouzMenuPage .app-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: var(--brand-beige-bg-solid);
+            box-shadow: 0 5px 25px rgba(0,0,0,0.15);
+            overflow: hidden;
+        }
+
+        #fayrouzMenuPage .header-main {
+            background-color: var(--brand-dark-brown);
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            align-items: center;
+            padding: 0 10px;
+            height: var(--fayrouz-header-main-height);
+            position: sticky;
+            top: 0;
+            z-index: 100; /* Relative to its own page container */
+        }
+        
+        #fayrouzMenuPage .header-logo-link {
+            display: flex;
+            align-items: center;
+            height: calc(var(--fayrouz-header-main-height) - 20px);
+            margin-inline-end: 10px;
+        }
+        #fayrouzMenuPage .header-logo-link img {
+            height: 100%;
+            width: auto;
+            max-width: 120px;
+            object-fit: contain;
+        }
+
+        #fayrouzMenuPage .reset-button {
+            color: var(--brand-white-text);
+            font-size: 1.6em;
+            padding: 0 10px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            margin-inline-start: 10px;
+        }
+        #fayrouzMenuPage .reset-button:hover { color: var(--brand-terracotta-main); }
+
+        #fayrouzMenuPage .main-categories-nav {
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+            text-align: center;
+        }
+        #fayrouzMenuPage .main-categories-nav::-webkit-scrollbar { display: none; }
+
+        #fayrouzMenuPage .main-category-btn {
+            display: inline-block;
+            background-color: rgba(255,255,255,0.1);
+            color: var(--brand-white-text);
+            padding: 8px 15px;
+            margin: 0 3px;
+            border-radius: var(--fayrouz-border-radius-main);
+            font-size: 0.9em;
+            font-weight: 500;
+            cursor: pointer;
+            border: 1px solid transparent;
+            transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+            font-family: 'Tajawal', sans-serif; /* Ensure font */
+        }
+        #fayrouzMenuPage .main-category-btn.active, #fayrouzMenuPage .main-category-btn:hover {
+            background-color: var(--brand-terracotta-main);
+            color: var(--brand-white-text);
+            border-color: var(--brand-terracotta-main);
+        }
+
+        #fayrouzMenuPage .banner-image {
+            width: 100%;
+            height: var(--fayrouz-banner-height);
+            background-image: url('https://via.placeholder.com/600x120/D7CCC8/A1887F?Text=Café+Fayrouz');
+            background-size: cover;
+            background-position: center;
+        }
+
+        #fayrouzMenuPage .header-secondary-wrapper {
+            position: sticky;
+            top: var(--fayrouz-header-main-height); /* Stick below main header */
+            z-index: 99;
+            background-color: var(--brand-terracotta-main);
+            display: flex;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        #fayrouzMenuPage .header-secondary {
+            padding: 0;
+            height: var(--fayrouz-header-secondary-height);
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+            flex-grow: 1;
+            display: flex;
+            align-items: center;
+        }
+        #fayrouzMenuPage .header-secondary::-webkit-scrollbar { display: none; }
+
+        #fayrouzMenuPage .scroll-arrow {
+            background-color: rgba(0, 0, 0, 0.1);
+            color: var(--brand-white-text);
+            border: none;
+            padding: 10px 5px;
+            cursor: pointer;
+            font-size: 1.5em;
+            line-height: 1;
+            display: none;
+            height: var(--fayrouz-header-secondary-height);
+            z-index: 10;
+            flex-shrink: 0;
+            font-family: 'Tajawal', sans-serif; /* Ensure font */
+        }
+        #fayrouzMenuPage .scroll-arrow:hover { background-color: rgba(0, 0, 0, 0.2); }
+        
+        @media (min-width: 768px) { #fayrouzMenuPage .scroll-arrow { display: flex; align-items: center; } }
+
+        #fayrouzMenuPage .secondary-category-btn {
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-around;
+            background-color: transparent;
+            color: var(--brand-white-text);
+            padding: 8px 5px 5px 5px;
+            margin: 0 5px;
+            border-radius: var(--fayrouz-border-radius-main);
+            font-size: 0.8em;
+            cursor: pointer;
+            text-align: center;
+            width: 85px;
+            height: 100%;
+            border: 2px solid transparent;
+            transition: background-color 0.2s, color 0.2s, border-color 0.2s;
+            flex-shrink: 0;
+            font-family: 'Tajawal', sans-serif; /* Ensure font */
+        }
+        #fayrouzMenuPage .secondary-category-btn .icon {
+            font-size: 1.6em; margin-bottom: 4px; flex-shrink: 0; color: var(--brand-white-text); transition: color 0.2s;
+        }
+        #fayrouzMenuPage .secondary-category-btn .text {
+            white-space: normal; line-height: 1.25; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; word-break: keep-all; width: 100%; color: var(--brand-white-text); transition: color 0.2s;
+        }
+        #fayrouzMenuPage .secondary-category-btn.active, #fayrouzMenuPage .secondary-category-btn:hover {
+            background-color: var(--brand-dark-brown); border-color: var(--brand-white-text);
+        }
+
+        #fayrouzMenuPage .content-area {
+            padding: 20px 15px;
+            background-color: var(--brand-cream-content);
+            min-height: calc(100vh - var(--fayrouz-header-main-height) - var(--fayrouz-banner-height) - var(--fayrouz-header-secondary-height) - 40px);
+        }
+
+        #fayrouzMenuPage .selected-category-title {
+            text-align: center; font-size: 1.5em; font-weight: 700; color: var(--brand-dark-brown); margin-bottom: 20px; padding: 8px 0; border-bottom: 2px solid var(--brand-terracotta-main); display: block; font-family: 'Tajawal', sans-serif;
+        }
+
+        #fayrouzMenuPage .menu-items-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 15px;
+        }
+
+        #fayrouzMenuPage .menu-item-card {
+            background-color: var(--brand-white-text); border-radius: var(--fayrouz-border-radius-items); box-shadow: 0 3px 10px rgba(74, 59, 49, 0.08); overflow: hidden; cursor: pointer; display: flex; flex-direction: column; opacity: 0; transform: translateY(10px); animation: fadeInItemFayrouz 0.4s ease-out forwards; transition: box-shadow 0.3s ease;
+        }
+        #fayrouzMenuPage .menu-item-card:hover { box-shadow: 0 5px 15px rgba(74, 59, 49, 0.12); }
+        #fayrouzMenuPage .menu-item-card:nth-child(1) { animation-delay: 0.05s; }
+        #fayrouzMenuPage .menu-item-card:nth-child(2) { animation-delay: 0.1s; }
+        #fayrouzMenuPage .menu-item-card:nth-child(3) { animation-delay: 0.15s; }
+
+        @keyframes fadeInItemFayrouz { to { opacity: 1; transform: translateY(0); } } /* Renamed animation */
+
+        #fayrouzMenuPage .menu-item-card.pop-animation { animation: popItemFayrouz 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; } /* Renamed animation */
+        @keyframes popItemFayrouz { 0% { transform: scale(1); } 50% { transform: scale(1.08); } 100% { transform: scale(1); } } /* Renamed animation */
+
+        #fayrouzMenuPage .menu-item-card .item-image {
+            width: 100%; height: 100px; object-fit: cover; background-color: var(--brand-beige-bg-solid);
+        }
+        #fayrouzMenuPage .menu-item-card .item-name-bar {
+            padding: 10px 8px; text-align: center; color: var(--brand-white-text); font-weight: 500; font-size: 0.9em; background-color: var(--brand-terracotta-main); font-family: 'Tajawal', sans-serif;
+        }
+
+        #fayrouzMenuPage .lightbox-modal { /* Scoped lightbox */
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(74, 59, 49, 0.8); display: flex; align-items: center; justify-content: center; z-index: 1000; /* High z-index within its page */ opacity: 0; visibility: hidden; transition: opacity 0.3s ease, visibility 0.3s ease; padding: 15px;
+        }
+        #fayrouzMenuPage .lightbox-modal.visible { opacity: 1; visibility: visible; }
+
+        #fayrouzMenuPage .lightbox-content {
+            background-color: var(--brand-cream-content); padding: 25px; border-radius: var(--fayrouz-border-radius-items); max-width: 400px; width: 90%; text-align: center; position: relative; max-height: 85vh; overflow-y: auto; box-shadow: 0 5px 20px rgba(0,0,0,0.2); font-family: 'Tajawal', sans-serif;
+        }
+        #fayrouzMenuPage .lightbox-close {
+            position: absolute; top: 10px; left: 15px; right: auto; font-size: 1.8em; font-weight: bold; color: var(--brand-terracotta-main); cursor: pointer; font-family: 'Tajawal', sans-serif;
+        }
+        #fayrouzMenuPage .lightbox-close:hover { color: var(--brand-dark-brown); }
+
+        #fayrouzMenuPage #fayrouzLightboxImage { /* ID changed */
+            width: 100%; max-height: 200px; object-fit: contain; border-radius: var(--fayrouz-border-radius-items) var(--fayrouz-border-radius-items) 0 0; margin-bottom: 20px; background-color: var(--brand-beige-bg-solid);
+        }
+        #fayrouzMenuPage #fayrouzLightboxTitle { /* ID changed */
+            font-size: 1.6em; margin-bottom: 10px; color: var(--brand-dark-brown);
+        }
+        #fayrouzMenuPage #fayrouzLightboxDescription { /* ID changed */
+            font-size: 1em; margin-bottom: 15px; line-height: 1.6; color: #555; white-space: pre-line;
+        }
+        #fayrouzMenuPage #fayrouzLightboxPrice { /* ID changed */
+            font-size: 1.3em; font-weight: bold; color: var(--brand-terracotta-main);
+        }
+        /* --- END OF FAYROUZ MENU CSS --- */
+
+
+        /* --- START OF EATWELL MENU CSS (Scoped with #eatwellMenuPage) --- */
+        #eatwellMenuPage.eatwell-theme { /* Scoped .eatwell-theme styles */
+            font-family: 'Cairo', sans-serif !important;
+            background-image: url('https://www.transparenttextures.com/patterns/light-wood-fibers.png');
+            background-color: var(--eatwell-content-area-bg);
+            background-attachment: fixed;
+            color: var(--eatwell-dark-text);
+            /* overscroll-behavior-y: contain; Applied to html/body now */
+            padding-bottom: 20px; /* If #eatwellMenuPage is full height and scrolls */
+        }
+        /* Ensure buttons and specific text elements inherit/use Cairo font */
+        #eatwellMenuPage.eatwell-theme button,
+        #eatwellMenuPage.eatwell-theme .main-category-btn,
+        #eatwellMenuPage.eatwell-theme .secondary-category-btn .text,
+        #eatwellMenuPage.eatwell-theme .item-name-bar,
+        #eatwellMenuPage.eatwell-theme .selected-category-title,
+        #eatwellMenuPage.eatwell-theme #eatwellLightboxTitle, /* ID changed */
+        #eatwellMenuPage.eatwell-theme #eatwellLightboxDescription, /* ID changed */
+        #eatwellMenuPage.eatwell-theme #eatwellLightboxPrice, /* ID changed */
+        #eatwellMenuPage.eatwell-theme .secondary-category-btn .icon,
+        #eatwellMenuPage.eatwell-theme .reset-button,
+        #eatwellMenuPage.eatwell-theme .scroll-arrow,
+        #eatwellMenuPage.eatwell-theme .lightbox-close {
+            font-family: 'Cairo', sans-serif;
+        }
+
+        #eatwellMenuPage .app-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: var(--eatwell-card-bg);
+            box-shadow: 0 5px 25px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        #eatwellMenuPage .header-main {
+            background-color: var(--eatwell-primary-green);
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            align-items: center;
+            padding: 0 10px;
+            height: var(--eatwell-header-main-height);
+            position: sticky;
+            top: 0;
+            z-index: 100; /* Relative to its own page container */
+        }
+
+        #eatwellMenuPage .header-logo-link {
+            display: flex;
+            align-items: center;
+            height: calc(var(--eatwell-header-main-height) - 20px);
+            margin-inline-end: 10px;
+        }
+        #eatwellMenuPage .header-logo-link img {
+            height: 100%; width: auto; max-width: 120px; object-fit: contain;
+        }
+
+        #eatwellMenuPage .reset-button {
+            color: var(--eatwell-light-text-on-green); font-size: 1.6em; padding: 0 10px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-inline-start: 10px;
+        }
+        #eatwellMenuPage .reset-button:hover { color: var(--eatwell-secondary-mint); }
+
+        #eatwellMenuPage .main-categories-nav {
+            overflow-x: auto; white-space: nowrap; -webkit-overflow-scrolling: touch; text-align: center;
+        }
+        #eatwellMenuPage .main-categories-nav::-webkit-scrollbar { display: none; }
+
+        #eatwellMenuPage .main-category-btn {
+            display: inline-block; background-color: rgba(255,255,255,0.15); color: var(--eatwell-light-text-on-green); padding: 8px 15px; margin: 0 3px; border-radius: var(--eatwell-border-radius-main); font-size: 0.9em; font-weight: 500; cursor: pointer; border: 1px solid transparent; transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+        }
+        #eatwellMenuPage .main-category-btn.active, #eatwellMenuPage .main-category-btn:hover {
+            background-color: var(--eatwell-secondary-mint); color: var(--eatwell-dark-text); border-color: var(--eatwell-secondary-mint);
+        }
+
+        #eatwellMenuPage .banner-image {
+            width: 100%; height: var(--eatwell-banner-height); background-image: url('https://via.placeholder.com/600x150/8BC34A/FFFFFF?Text=EatWell+Healthy+Choices'); background-size: cover; background-position: center;
+        }
+
+        #eatwellMenuPage .header-secondary-wrapper {
+            position: sticky; top: var(--eatwell-header-main-height); /* Stick below main header */ z-index: 99; background-color: var(--eatwell-primary-green); display: flex; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        #eatwellMenuPage .header-secondary {
+            padding: 0; height: var(--eatwell-header-secondary-height); overflow-x: auto; white-space: nowrap; -webkit-overflow-scrolling: touch; flex-grow: 1; display: flex; align-items: center;
+        }
+        #eatwellMenuPage .header-secondary::-webkit-scrollbar { display: none; }
+
+        #eatwellMenuPage .scroll-arrow {
+            background-color: rgba(255, 255, 255, 0.1); color: var(--eatwell-light-text-on-green); border: none; padding: 10px 5px; cursor: pointer; font-size: 1.5em; line-height: 1; display: none; height: var(--eatwell-header-secondary-height); z-index: 10; flex-shrink: 0;
+        }
+        #eatwellMenuPage .scroll-arrow:hover { background-color: rgba(255, 255, 255, 0.2); }
+        @media (min-width: 768px) { #eatwellMenuPage .scroll-arrow { display: flex; align-items: center; } }
+
+        #eatwellMenuPage .secondary-category-btn {
+            display: inline-flex; flex-direction: column; align-items: center; justify-content: space-around; background-color: transparent; color: var(--eatwell-light-text-on-green); padding: 8px 5px 5px 5px; margin: 0 5px; border-radius: var(--eatwell-border-radius-main); font-size: 0.8em; cursor: pointer; text-align: center; width: 85px; height: 100%; border: 2px solid transparent; transition: background-color 0.2s, color 0.2s, border-color 0.2s; flex-shrink: 0;
+        }
+        #eatwellMenuPage .secondary-category-btn .icon {
+            font-size: 1.6em; margin-bottom: 4px; flex-shrink: 0; color: var(--eatwell-light-text-on-green); transition: color 0.2s;
+        }
+        #eatwellMenuPage .secondary-category-btn .text {
+            white-space: normal; line-height: 1.25; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; word-break: keep-all; width: 100%; color: var(--eatwell-light-text-on-green); transition: color 0.2s;
+        }
+        #eatwellMenuPage .secondary-category-btn.active, #eatwellMenuPage .secondary-category-btn:hover {
+            background-color: var(--eatwell-secondary-mint); border-color: var(--eatwell-light-text-on-green);
+        }
+        #eatwellMenuPage .secondary-category-btn.active .text, #eatwellMenuPage .secondary-category-btn.active .icon,
+        #eatwellMenuPage .secondary-category-btn:hover .text, #eatwellMenuPage .secondary-category-btn:hover .icon {
+            color: var(--eatwell-dark-text);
+        }
+
+        #eatwellMenuPage .content-area {
+            padding: 20px 15px; background-color: var(--eatwell-content-area-bg); min-height: calc(100vh - var(--eatwell-header-main-height) - var(--eatwell-banner-height) - var(--eatwell-header-secondary-height) - 40px);
+        }
+
+        #eatwellMenuPage .selected-category-title {
+            text-align: center; font-size: 1.5em; font-weight: 700; color: var(--eatwell-primary-green); margin-bottom: 20px; padding: 8px 0; border-bottom: 2px solid var(--eatwell-primary-green); display: block;
+        }
+
+        #eatwellMenuPage .menu-items-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 15px;
+        }
+
+        #eatwellMenuPage .menu-item-card {
+            background-color: var(--eatwell-card-bg); border-radius: var(--eatwell-border-radius-items); box-shadow: 0 3px 10px rgba(151, 180, 71, 0.15); overflow: hidden; cursor: pointer; display: flex; flex-direction: column; opacity: 0; transform: translateY(10px); animation: fadeInItemEatwell 0.4s ease-out forwards; transition: box-shadow 0.3s ease;
+        }
+        #eatwellMenuPage .menu-item-card:hover { box-shadow: 0 5px 15px rgba(151, 180, 71, 0.2); }
+        #eatwellMenuPage .menu-item-card:nth-child(1) { animation-delay: 0.05s; }
+        #eatwellMenuPage .menu-item-card:nth-child(2) { animation-delay: 0.1s; }
+        #eatwellMenuPage .menu-item-card:nth-child(3) { animation-delay: 0.15s; }
+
+        @keyframes fadeInItemEatwell { to { opacity: 1; transform: translateY(0); } } /* Renamed animation */
+
+        #eatwellMenuPage .menu-item-card.pop-animation { animation: popItemEatwell 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; } /* Renamed animation */
+        @keyframes popItemEatwell { 0% { transform: scale(1); } 50% { transform: scale(1.08); } 100% { transform: scale(1); } } /* Renamed animation */
+
+        #eatwellMenuPage .menu-item-card .item-image {
+            width: 100%; height: var(--item-image-square-size); background-color: var(--eatwell-content-area-bg); overflow: hidden;
+        }
+        #eatwellMenuPage .menu-item-card .item-image img {
+            display: block; width: 100%; height: 100%; object-fit: cover;
+        }
+        #eatwellMenuPage .menu-item-card .item-name-bar {
+            padding: 10px 8px; text-align: center; color: var(--eatwell-light-text-on-green); font-weight: 500; font-size: 0.9em; background-color: var(--eatwell-primary-green);
+        }
+
+        #eatwellMenuPage .lightbox-modal { /* Scoped lightbox */
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(80, 100, 50, 0.7); display: flex; align-items: center; justify-content: center; z-index: 1000; opacity: 0; visibility: hidden; transition: opacity 0.3s ease, visibility 0.3s ease; padding: 15px;
+        }
+        #eatwellMenuPage .lightbox-modal.visible { opacity: 1; visibility: visible; }
+
+        #eatwellMenuPage .lightbox-content {
+            background-color: var(--eatwell-card-bg); padding: 25px; border-radius: var(--eatwell-border-radius-items); max-width: 400px; width: 90%; text-align: center; position: relative; max-height: 85vh; overflow-y: auto; box-shadow: 0 5px 20px rgba(0,0,0,0.2); font-family: 'Cairo', sans-serif;
+        }
+        #eatwellMenuPage .lightbox-close {
+            position: absolute; top: 10px; left: 15px; right: auto; font-size: 1.8em; font-weight: bold; color: var(--eatwell-primary-green); cursor: pointer;
+        }
+        #eatwellMenuPage .lightbox-close:hover { color: var(--eatwell-dark-text); }
+
+        #eatwellMenuPage #eatwellLightboxImage { /* ID changed */
+            width: 100%; max-height: 200px; object-fit: contain; border-radius: var(--eatwell-border-radius-items) var(--eatwell-border-radius-items) 0 0; margin-bottom: 20px; background-color: var(--eatwell-content-area-bg);
+        }
+        #eatwellMenuPage #eatwellLightboxTitle { /* ID changed */
+            font-size: 1.6em; margin-bottom: 10px; color: var(--eatwell-primary-green);
+        }
+        #eatwellMenuPage #eatwellLightboxDescription { /* ID changed */
+            font-size: 1em; margin-bottom: 15px; line-height: 1.6; color: var(--eatwell-dark-text); white-space: pre-line;
+        }
+        #eatwellMenuPage #eatwellLightboxPrice { /* ID changed */
+            font-size: 1.3em; font-weight: bold; color: var(--eatwell-primary-green);
+        }
+        /* --- END OF EATWELL MENU CSS --- */
+
+    </style>
+</head>
+<body>
+
+    <!-- LANDING PAGE SECTION -->
+    <div id="landingPage" class="page-section-container active-page">
+        <section class="landing-section fayrouz-half">
+            <div class="fayrouz-graphics">
+                <img src="images/fayrouz_illustration.png" alt="Fayrouz Illustration" class="fayrouz-illustration">
+                <img src="images/fayrouz_calligraphy.svg" alt="فيروز" class="fayrouz-calligraphy">
+            </div>
+        </section>
+        <section class="landing-section eatwell-half">
+            <div class="eatwell-logo-container">
+                <img src="images/eatwell_logo_landing.svg" alt="Eatwell Logo" class="eatwell-main-logo">
+                <div class="eatwell-title-text">EAT WELL</div>
+                <div class="eatwell-subtitle-text">Diet Food Restaurant</div>
+            </div>
+        </section>
+        <div class="central-buttons-container">
+            <a href="#" onclick="showPage('fayrouzMenuPage'); return false;" class="nav-button fayrouz-nav-button" aria-label="قائمة فيروز">
+                <span class="arrow">▲</span>
+            </a>
+            <a href="#" onclick="showPage('eatwellMenuPage'); return false;" class="nav-button eatwell-nav-button" aria-label="قائمة إيت ويل">
+                <span class="arrow">▼</span>
+            </a>
+        </div>
+        <footer class="footer">
+            <p>
+                تابعونا على إنستغرام:
+                <a href="https://www.instagram.com/fayruz_cafe?igsh=eGo0cWttdnRqMXAz" target="_blank" rel="noopener noreferrer">فيروز كافيه</a> |
+                <a href="https://www.instagram.com/eatwellerbil/" target="_blank" rel="noopener noreferrer">إيت ويل</a>
+            </p>
+        </footer>
+    </div>
+
+    <!-- FAYROUZ MENU PAGE SECTION -->
+    <div id="fayrouzMenuPage" class="page-section-container">
+        <div class="app-container">
+            <header class="header-main">
+                <a href="#" onclick="showPage('landingPage'); return false;" class="header-logo-link" aria-label="Fayrouz Cafe Home">
+                     <img src="images/fayrouz_logo.svg" alt="كافيه فيروز">
+                </a>
+                <nav class="main-categories-nav" id="fayrouzMainCategoriesNav"></nav> <!-- ID changed -->
+                <div class="reset-button" onclick="fayrouzGoBackToStart()" title="إعادة تعيين">&#x21BB;</div> <!-- Function changed -->
+            </header>
+            <div class="banner-image" id="fayrouzBannerImage"></div> <!-- ID changed -->
+            <div class="header-secondary-wrapper"> 
+                <button class="scroll-arrow" id="fayrouzScrollLeftArrow" aria-label="Scroll Left">&#10094;</button> <!-- ID changed -->
+                <header class="header-secondary" id="fayrouzSecondaryCategoriesNavContainer"></header> <!-- ID changed -->
+                <button class="scroll-arrow" id="fayrouzScrollRightArrow" aria-label="Scroll Right">&#10095;</button> <!-- ID changed -->
+            </div>
+            <main class="content-area">
+                <h2 class="selected-category-title" id="fayrouzSelectedCategoryTitle"></h2> <!-- ID changed -->
+                <div class="menu-items-grid" id="fayrouzMenuItemsGrid"></div> <!-- ID changed -->
+            </main>
+            <div id="fayrouzLightboxModal" class="lightbox-modal"> <!-- ID changed -->
+                <div class="lightbox-content">
+                    <span class="lightbox-close" onclick="fayrouzCloseLightbox()">&times;</span> <!-- Function changed -->
+                    <img id="fayrouzLightboxImage" src="" alt="Menu Item" loading="lazy"> <!-- ID changed -->
+                    <h3 id="fayrouzLightboxTitle"></h3> <!-- ID changed -->
+                    <p id="fayrouzLightboxDescription"></p> <!-- ID changed -->
+                    <p id="fayrouzLightboxPrice"></p> <!-- ID changed -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- EATWELL MENU PAGE SECTION -->
+    <div id="eatwellMenuPage" class="page-section-container eatwell-theme"> <!-- Added .eatwell-theme here -->
+         <div class="app-container">
+            <header class="header-main">
+                <a href="#" onclick="showPage('landingPage'); return false;" class="header-logo-link" aria-label="EatWell Home">
+                     <img src="images/eatwell_logo.svg" alt="إيت ويل">
+                </a>
+                <nav class="main-categories-nav" id="eatwellMainCategoriesNav"></nav> <!-- ID changed -->
+                <div class="reset-button" onclick="eatwellGoBackToStart()" title="إعادة تعيين">&#x21BB;</div> <!-- Function changed -->
+            </header>
+            <div class="banner-image" id="eatwellBannerImage"></div> <!-- ID changed -->
+            <div class="header-secondary-wrapper"> 
+                <button class="scroll-arrow" id="eatwellScrollLeftArrow" aria-label="Scroll Left">&#10094;</button> <!-- ID changed -->
+                <header class="header-secondary" id="eatwellSecondaryCategoriesNavContainer"></header> <!-- ID changed -->
+                <button class="scroll-arrow" id="eatwellScrollRightArrow" aria-label="Scroll Right">&#10095;</button> <!-- ID changed -->
+            </div>
+            <main class="content-area">
+                <h2 class="selected-category-title" id="eatwellSelectedCategoryTitle"></h2> <!-- ID changed -->
+                <div class="menu-items-grid" id="eatwellMenuItemsGrid"></div> <!-- ID changed -->
+            </main>
+            <div id="eatwellLightboxModal" class="lightbox-modal"> <!-- ID changed -->
+                <div class="lightbox-content">
+                    <span class="lightbox-close" onclick="eatwellCloseLightbox()">&times;</span> <!-- Function changed -->
+                    <img id="eatwellLightboxImage" src="" alt="Menu Item" loading="lazy"> <!-- ID changed -->
+                    <h3 id="eatwellLightboxTitle"></h3> <!-- ID changed -->
+                    <p id="eatwellLightboxDescription"></p> <!-- ID changed -->
+                    <p id="eatwellLightboxPrice"></p> <!-- ID changed -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- GLOBAL PAGE NAVIGATION (MOVED TO TOP OF SCRIPT BLOCK) ---
+        let fayrouzMenuInitialized = false;
+        let eatwellMenuInitialized = false;
+
+        // Ensure this function is globally accessible for onclick attributes
+        window.showPage = function(pageId) {
+            console.log("Attempting to show page:", pageId); // DEBUG: Log which page we're trying to show
+
+            document.querySelectorAll('.page-section-container').forEach(page => {
+                page.classList.remove('active-page');
+            });
+
+            const targetPage = document.getElementById(pageId);
+
+            if (targetPage) {
+                console.log("Target page found:", pageId); // DEBUG: Confirm target page exists
+                targetPage.classList.add('active-page');
+                console.log(pageId + " should now be active."); // DEBUG: Confirm class added
+
+                // Initialize menus only if they haven't been already
+                if (pageId === 'fayrouzMenuPage' && !fayrouzMenuInitialized) {
+                    console.log("Initializing Fayrouz Menu..."); // DEBUG
+                    initFayrouzMenu();
+                    fayrouzMenuInitialized = true;
+                    console.log("Fayrouz Menu Initialized."); // DEBUG
+                } else if (pageId === 'eatwellMenuPage' && !eatwellMenuInitialized) {
+                    console.log("Initializing Eatwell Menu..."); // DEBUG
+                    initEatwellMenu();
+                    eatwellMenuInitialized = true;
+                    console.log("Eatwell Menu Initialized."); // DEBUG
+                }
+
+                // Control body scroll based on active page
+                if (pageId === 'landingPage') {
+                    document.body.style.overflowY = 'hidden';
+                } else {
+                    document.body.style.overflowY = 'auto';
+                }
+                window.scrollTo({ top: 0, behavior: 'smooth' }); 
+            } else {
+                console.error("Target page ID not found in DOM:", pageId); // DEBUG: Error if page ID is wrong
+            }
+        }
+        
+        // Initial body scroll setting based on the default active page
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log("DOM Fully Loaded and Parsed"); // DEBUG: Confirm DOM is ready
+            const activeLandingPage = document.getElementById('landingPage');
+            if (activeLandingPage && activeLandingPage.classList.contains('active-page')) {
+                 document.body.style.overflowY = 'hidden';
+            } else {
+                 document.body.style.overflowY = 'auto'; 
+            }
+        });
+
+
+        // --- FAYROUZ MENU SCRIPT ---
+        function initFayrouzMenu() {
+            // All Fayrouz variables and functions as previously defined
+            const fayrouzMainCategoriesNav = document.getElementById('fayrouzMainCategoriesNav');
+            const fayrouzSecondaryCategoriesNavContainer = document.getElementById('fayrouzSecondaryCategoriesNavContainer');
+            const fayrouzSelectedCategoryTitle = document.getElementById('fayrouzSelectedCategoryTitle');
+            const fayrouzMenuItemsGrid = document.getElementById('fayrouzMenuItemsGrid');
+            const fayrouzBannerImageEl = document.getElementById('fayrouzBannerImage');
+            const fayrouzScrollLeftArrow = document.getElementById('fayrouzScrollLeftArrow');
+            const fayrouzScrollRightArrow = document.getElementById('fayrouzScrollRightArrow');
+            const fayrouzLightboxModalEl = document.getElementById('fayrouzLightboxModal'); 
+            const fayrouzLightboxImageEl = document.getElementById('fayrouzLightboxImage'); 
+            const fayrouzLightboxTitleEl = document.getElementById('fayrouzLightboxTitle'); 
+            const fayrouzLightboxDescriptionEl = document.getElementById('fayrouzLightboxDescription'); 
+            const fayrouzLightboxPriceEl = document.getElementById('fayrouzLightboxPrice'); 
+
+            const fayrouzMenuData = {
+                "main_0": {
+                    name: "قائمة المشروبات",
+                    banner: "https://via.placeholder.com/600x120/A1887F/EDE7F6?Text=Beverages",
+                    secondaryCategories: {
+                        "sec_0_0": { name: "المشروبات الايطالية", icon: "☕", items: [
+                            { id: "item_0", name: "أسبريسو سنكل", image: "images/أسبريسو_سنكل.jpg", price: "٣٠٠٠ د.ع", description: "" },
+                            { id: "item_1", name: "أسبريسو دبل", image: "images/أسبريسو_دبل.jpg", price: "٤٠٠٠ د.ع", description: "" },
+                            { id: "item_2", name: "نسكافيه", image: "images/أسبريسو_سنكل.jpg", price: "٤٠٠٠ د.ع", description: "" },
+                            { id: "item_3", name: "كابتشينو", image: "images/كابتشينو.jpg", price: "٥٠٠٠ د.ع", description: "" },
+                            { id: "item_4", name: "افوكاتو", image: "images/أسبريسو_سنكل.jpg", price: "٥٠٠٠ د.ع", description: "" },
+                            { id: "item_5", name: "لاتيه", image: "images/لاتيه.jpg", price: "٥٠٠٠ د.ع", description: "كاراميل، بندق، فانيلا، فراولة" },
+                            { id: "item_6", name: "سبانش لاتيه", image: "images/سبانش_لاتيه.jpg", price: "٥٠٠٠ د.ع", description: "" },
+                            { id: "item_7", name: "موكا", image: "images/موكا.jpg", price: "٥٠٠٠ د.ع", description: "" },
+                            { id: "item_8", name: "سولتد كاراميل", image: "images/سولتد_كاراميل.jpg", price: "٥٠٠٠ د.ع", description: "" },
+                            { id: "item_9", name: "دولتشي ديلتشي", image: "images/دولتشي_ديلتشي.jpg", price: "٥٠٠٠ د.ع", description: "" },
+                            { id: "item_10", name: "فلات وايت", image: "images/فلات_وايت.jpg", price: "٥٠٠٠ د.ع", description: "" },
+                            { id: "item_11", name: "كورتادو", image: "images/كورتادو.jpg", price: "٥٠٠٠ د.ع", description: "" },
+                            { id: "item_12", name: "وايت موكا", image: "images/وايت_موكا.jpg", price: "٥٠٠٠ د.ع", description: "" },
+                            { id: "item_13", name: "امريكانو", image: "images/امريكانو.jpg", price: "٥٠٠٠ د.ع", description: "" },
+                            { id: "item_14", name: "الفريدو", image: "images/الفريدو.jpg", price: "٦٠٠٠ د.ع", description: "" },
+                            { id: "item_15", name: "شاي", image: "images/شاي.jpg", price: "٢٠٠٠ د.ع", description: "" },
+                            { id: "item_16", name: "شاي حليب", image: "images/شاي_حليب.jpg", price: "٣٠٠٠ د.ع", description: "" },
+                            { id: "item_17", name: "شاي كرك", image: "images/شاي_كرك.jpg", price: "٣٠٠٠ د.ع", description: "" },
+                            { id: "item_18", name: "سحلب", image: "images/سحلب.jpg", price: "٤٠٠٠ د.ع", description: "فستق، مبروش، دارسين" },
+                            { id: "item_19", name: "هوت جوكليت بيستاشيو", image: "images/هوت_جوكليت_بيستاشيو.jpg", price: "٥٠٠٠ د.ع", description: "هوت جوكليت بيستاشيو" },
+                            { id: "item_20", name: "هوت جوكليت", image: "images/هوت_جوكليت.jpg", price: "٥٠٠٠ د.ع", description: "وايت، دارك، مارس" }
+                        ]},
+                        "sec_0_1": { name: "القهوة", icon: "☕", items: [
+                            { id: "item_21", name: "تركية", image: "images/تركيه.jpg", price: "٣٠٠٠ - ٥٠٠٠ د.ع", description: "صغير، كبير" },
+                            { id: "item_22", name: "بندق", image: "images/بندق.jpg", price: "٣٠٠٠ - ٥٠٠٠ د.ع", description: "صغير، كبير" },
+                            { id: "item_23", name: "جكليتية", image: "images/جكليتية.jpg", price: "٣٠٠٠ - ٥٠٠٠ د.ع", description: "صغير، كبير" },
+                            { id: "item_24", name: "نستلة", image: "images/قهوة نستلة.jpg", price: "٣٠٠٠ - ٥٠٠٠ د.ع", description: "صغير، كبير" },
+                            { id: "item_25", name: "فيروز", image: "images/قهوة فيروز.jpg", price: "٣٠٠٠ - ٥٠٠٠ د.ع", description: "صغير، كبير" }
+                        ]},
+                        "sec_0_2": { name: "فرابيه", icon: "🥤", items: [
+                            { id: "item_26", name: "فرابتشينو", image: "images/فرابتشينو.jpg", price: "٥٠٠٠ د.ع", description: "" },
+                            { id: "item_27", name: "كاراميل", image: "images/كاراميل.jpg", price: "٥٠٠٠ د.ع", description: "" },
+                            { id: "item_28", name: "بيستاشيو", image: "images/بيستاشيو.jpg", price: "٦٠٠٠ د.ع", description: "" }
+                        ]},
+                        "sec_0_3": { name: "موهيتو", icon: "🍹", items: [
+                            { id: "item_29", name: "بلو", image: "images/بلو.jpg", price: "٥٠٠٠ د.ع", description: "" },
+                            { id: "item_30", name: "فراولة", image: "images/فراولة موهيتو.jpg", price: "٥٠٠٠ د.ع", description: "" },
+                            { id: "item_31", name: "باشن فروت", image: "images/باشن_فروت.jpg", price: "٥٠٠٠ د.ع", description: "" },
+                            { id: "item_32", name: "خوخ", image: "images/خوخ.jpg", price: "٥٠٠٠ د.ع", description: "" },
+                            { id: "item_33", name: "شعر بنات", image: "images/شعر_بنات.jpg", price: "٥٠٠٠ د.ع", description: "" },
+                            { id: "item_34", name: "ليمون نعناع", image: "images/ليمون_نعناع موهيتو.jpg", price: "٥٠٠٠ د.ع", description: "" },
+                            { id: "item_35", name: "مشروب طاقة", image: "images/مشروب_طاقة.jpg", price: "٥٠٠٠ د.ع", description: "" },
+                            { id: "item_36", name: "رمان", image: "images/رمان.jpg", price: "٥٠٠٠ د.ع", description: "" },
+                            { id: "item_37", name: "مكس بيري", image: "images/مكس بيري موهيتو.jpg", price: "٥٠٠٠ د.ع", description: "" },
+                            { id: "item_38", name: "فيروز", image: "images/فيروز موهيتو.jpg", price: "٦٠٠٠ د.ع", description: "" }
+                        ]},
+                        "sec_0_4": { name: "شاي مثلج", icon: "🧊", items: [
+                            { id: "item_39", name: "مكس خوخ", image: "images/مكس_خوخ.jpg", price: "٤٠٠٠ د.ع", description: "" },
+                            { id: "item_40", name: "مكس باشن", image: "images/مكس_باشن.jpg", price: "٤٠٠٠ د.ع", description: "" },
+                            { id: "item_41", name: "مكس فراولة", image: "images/مكس_فراولة.jpg", price: "٤٠٠٠ د.ع", description: "" },
+                            { id: "item_42", name: "مكس بيري", image: "images/مكس_بيري.jpg", price: "٤٠٠٠ د.ع", description: "" },
+                            { id: "item_43", name: "مكس ليمون", image: "images/مكس_ليمون.jpg", price: "٤٠٠٠ د.ع", description: "" }
+                        ]},
+                        "sec_0_5": { name: "ميلك شيك", icon: "🥛", items: [
+                            { id: "item_44", name: "فراولة", image: "images/فراولة.jpg", price: "٥٠٠٠ د.ع", description: "" },
+                            { id: "item_45", name: "فانيلا", image: "images/فانيلا.jpg", price: "٥٠٠٠ د.ع", description: "" },
+                            { id: "item_46", name: "مكس بيري", image: "images/مكس بيري.jpg", price: "٥٠٠٠ د.ع", description: "" },
+                            { id: "item_47", name: "موز + جوكليت + فراولة", image: "images/موز_جوكليت_فراولة.jpg", price: "٥٠٠٠ د.ع", description: "" },
+                            { id: "item_48", name: "بيستاشيو/ لوتس", image: "images/بيستاشيو_لوتس.jpg", price: "٦٠٠٠ د.ع", description: "" },
+                            { id: "item_49", name: "نستلة", image: "images/نستلة.jpg", price: "٦٠٠٠ د.ع", description: "اوريو، كندر، كيت كات، سنيكرز" },
+                            { id: "item_50", name: "فيروز", image: "images/فيروز.jpg", price: "٦٠٠٠ د.ع", description: "" }
+                        ]},
+                        "sec_0_6": { name: "العصائر", icon: "🧃", items: [
+                            { id: "item_51", name: "برتقال", image: "images/برتقال.jpg", price: "٥٠٠٠ د.ع", description: "" },
+                            { id: "item_52", name: "ليمون نعناع", image: "images/ليمون_نعناع.jpg", price: "٥٠٠٠ د.ع", description: "" },
+                            { id: "item_53", name: "موز", image: "images/موز.jpg", price: "٥٠٠٠ د.ع", description: "" },
+                            { id: "item_54", name: "حمضيات", image: "images/حمضيات.jpg", price: "٥٠٠٠ د.ع", description: "" }
+                        ]},
+                        "sec_0_7": { name: "سموذي طبيعي", icon: "🍹", items: [
+                            { id: "item_55", name: "سموذي فراولة", image: "images/سموذي_فراولة.jpg", price: "٥٠٠٠ د.ع", description: "" },
+                            { id: "item_56", name: "سموذي مانغا", image: "images/سموذي_مانغا.jpg", price: "٥٠٠٠ د.ع", description: "" },
+                            { id: "item_57", name: "سموذي اناناس", image: "images/سموذي_اناناس.jpg", price: "٥٠٠٠ د.ع", description: "" },
+                            { id: "item_58", name: "سموذي خوخ", image: "images/سموذي_خوخ.jpg", price: "٥٠٠٠ د.ع", description: "" },
+                            { id: "item_59", name: "سموذي فيروز", image: "images/سموذي_فيروز.jpg", price: "٦٠٠٠ د.ع", description: "" }
+                        ]},
+                        "sec_0_8": { name: "ليمونيد", icon: "🍋", items: [
+                            { id: "item_60", name: "كلاسك ليمونيد", image: "images/كلاسيك_ليمونيد.jpg", price: "٥٠٠٠ د.ع", description: "" },
+                            { id: "item_61", name: "كرين ليمونيد", image: "images/كرين_ليمونيد.jpg", price: "٥٠٠٠ د.ع", description: "" },
+                            { id: "item_62", name: "بلو ليمونيد", image: "images/بلو_ليمونيد.jpg", price: "٥٠٠٠ د.ع", description: "" },
+                            { id: "item_63", name: "وايت ليمونيد", image: "images/وايت_ليمونيد.jpg", price: "٥٠٠٠ د.ع", description: "" },
+                            { id: "item_64", name: "فيروز ليمونيد", image: "images/فيروز_ليمونيد.jpg", price: "٥٠٠٠ د.ع", description: "" }
+                        ]},
+                        "sec_0_9": { name: "سبشل مكس", icon: "🍹", items: [
+                            { id: "item_65", name: "مكس منت", image: "images/مكس_منت.jpg", price: "٦٠٠٠ د.ع", description: "" },
+                            { id: "item_66", name: "مكس أورنج", image: "images/مكس_أورنج.jpg", price: "٦٠٠٠ د.ع", description: "" },
+                            { id: "item_67", name: "بلو هاواي", image: "images/بلو_هاواي.jpg", price: "٦٠٠٠ د.ع", description: "" },
+                            { id: "item_68", name: "تروبيكال", image: "images/تروبيكال.jpg", price: "٦٠٠٠ د.ع", description: "" }
+                        ]},
+                        "sec_0_10": { name: "المشروبات", icon: "🥤", items: [
+                            { id: "item_69", name: "ببسي", image: "images/ببسي.jpg", price: "١٠٠٠ د.ع", description: "" },
+                            { id: "item_70", name: "سفن", image: "images/سفن.jpg", price: "١٠٠٠ د.ع", description: "" },
+                            { id: "item_71", name: "ميرندا", image: "images/ميرندا.jpg", price: "١٠٠٠ د.ع", description: "" },
+                            { id: "item_72", name: "صودا", image: "images/صودا.jpg", price: "٣٠٠٠ د.ع", description: "" },
+                            { id: "item_73", name: "ماء", image: "images/ماء.jpg", price: "١٠٠٠ د.ع", description: "" }
+                        ]}
+                    }
+                },
+                "main_1": { name: "قائمة الطعام", banner: "https://via.placeholder.com/600x120/A1887F/EDE7F6?Text=Food+Menu", secondaryCategories: {
+                    "sec_1_0": { name: "البيتزا", icon: "🍕", items: [
+                        { id: "item_74", name: "مارجريتا", image: "images/مارجريتا.jpg", price: "١٢٠٠٠ د.ع", description: "" },
+                        { id: "item_75", name: "بيبروني", image: "images/بيبروني.jpg", price: "١٣٠٠٠ د.ع", description: "" },
+                        { id: "item_76", name: "تيركي", image: "images/تيركي.jpg", price: "١٣٠٠٠ د.ع", description: "" },
+                        { id: "item_77", name: "بيستو دجاج", image: "images/بيستو_دجاج.jpg", price: "١٤٠٠٠ د.ع", description: "" },
+                        { id: "item_78", name: "الفريدو", image: "images/الفريدو بيتزا.jpg", price: "١٤٠٠٠ د.ع", description: "" },
+                        { id: "item_79", name: "لحم", image: "images/لحم.jpg", price: "١٥٠٠٠ د.ع", description: "" }
+                    ]},
+                    "sec_1_1": { name: "لحم بعجين", icon: "🫓", items: [
+                        { id: "item_80", name: "لحم بعجين", image: "images/لحم_بعجين.jpg", price: "٥٠٠٠ د.ع", description: "" },
+                        { id: "item_81", name: "لحم بعجين جبن", image: "images/لحم_بعجين_جبن.jpg", price: "٦٠٠٠ د.ع", description: "" },
+                        { id: "item_82", name: "لحم بعجين بيض", image: "images/لحم_بعجين_بيض.jpg", price: "٦٠٠٠ د.ع", description: "" }
+                    ]},
+                    "sec_1_2": { name: "المناقيش", icon: "🫓", items: [
+                        { id: "item_83", name: "محمرة", image: "images/محمرة.jpg", price: "٤٠٠٠ د.ع", description: "" },
+                        { id: "item_84", name: "لبنة", image: "images/لبنة.jpg", price: "٤٠٠٠ د.ع", description: "" },
+                        { id: "item_85", name: "جبن", image: "images/مناقيش جبن.jpg", price: "٤٠٠٠ د.ع", description: "" },
+                        { id: "item_86", name: "زعتر", image: "images/مناقيش زعتر.jpg", price: "٤٠٠٠ د.ع", description: "" },
+                        { id: "item_87", name: "جبن وزعتر", image: "images/جبن_وزعتر.jpg", price: "٤٠٠٠ د.ع", description: "" },
+                        { id: "item_88", name: "بيبروني", image: "images/مناقيش بيبروني.jpg", price: "٥٠٠٠ د.ع", description: "" },
+                        { id: "item_89", name: "لحم", image: "images/مناقيش لحم.jpg", price: "٥٠٠٠ د.ع", description: "" }
+                    ]},
+                    "sec_1_3": { name: "المعجنات", icon: "🍰", items: [
+                        { id: "item_90", name: "كوكيز", image: "images/كوكيز.jpg", price: "٣٠٠٠ د.ع", description: "" },
+                        { id: "item_91", name: "كرواسون", image: "images/كرواسون.jpg", price: "٣٠٠٠ د.ع", description: "" },
+                        { id: "item_92", name: "كرواسون جوكليت", image: "images/كرواسون_جوكليت.jpg", price: "٣٠٠٠ د.ع", description: "" },
+                        { id: "item_93", name: "كريم باف", image: "images/كريم باف.jpg", price: "٤٠٠٠ د.ع", description: "" },
+                        { id: "item_94", name: "راس العبد", image: "images/راس العبد.jpg", price: "٤٠٠٠ د.ع", description: "" },
+                        { id: "item_95", name: "ليزي كيك", image: "images/ليزي كيك.jpg", price: "٤٠٠٠ د.ع", description: "" },
+                        { id: "item_96", name: "كيك شوكولا", image: "images/كيك.jpg", price: "٥٠٠٠ د.ع", description: "" },
+                        { id: "item_97", name: "وايت كيك", image: "images/وايت_كيك.jpg", price: "٥٠٠٠ د.ع", description: "" },
+                        { id: "item_98", name: "تيراميسو", image: "images/تيراميسو.jpg", price: "٥٠٠٠ د.ع", description: "" },
+                        { id: "item_99", name: "تشيز كيك", image: "images/تشيز كيك.jpg", price: "٦٠٠٠ د.ع", description: "" },
+                        { id: "item_100", name: "سان سيباستيان", image: "images/سان سيباستيان.jpg", price: "٦٠٠٠ د.ع", description: "" },
+                        { id: "item_101", name: "برواينز", image: "images/برواينز.jpg", price: "٥٠٠٠ د.ع", description: "" },
+                        { id: "item_102", name: "موس كيك", image: "images/موس_كيك.jpg", price: "٥٠٠٠ د.ع", description: "" },
+                        { id: "item_103", name: "بنانا كيك", image: "images/بنانا_كيك.jpg", price: "٦٠٠٠ د.ع", description: "" },
+                        { id: "item_104", name: "سنكرز كيك", image: "images/سنكرز_كيك.jpg", price: "٦٠٠٠ د.ع", description: "" },
+                        { id: "item_105", name: "جرة السعادة", image: "images/جرة_السعادة.jpg", price: "٧٠٠٠ د.ع", description: "" },
+                        { id: "item_106", name: "ترليجة", image: "images/ترليجة.jpg", price: "٥٠٠٠ د.ع", description: "" }
+                    ]},
+                    "sec_1_4": { name: "آيس كريم", icon: "🍦", items: [
+                        { id: "item_107", name: "آيس كريم", image: "images/آيس_كريم.jpg", price: "٥٠٠٠ د.ع", description: "" }
+                    ]},
+                    "sec_1_5": { name: "الكريب", icon: "🥞", items: [
+                        { id: "item_108", name: "جوكليت", image: "images/جوكليت كريب.jpg", price: "٦٠٠٠ د.ع", description: "" },
+                        { id: "item_109", name: "كندر", image: "images/كندر كريب.jpg", price: "٦٠٠٠ د.ع", description: "" },
+                        { id: "item_110", name: "لوتس", image: "images/لوتس كريب.jpg", price: "٦٠٠٠ د.ع", description: "" },
+                        { id: "item_111", name: "أوريو", image: "images/أوريو كريب.jpg", price: "٦٠٠٠ د.ع", description: "" },
+                        { id: "item_112", name: "بنانا رول", image: "images/بنانا_رول.jpg", price: "٦٠٠٠ د.ع", description: "" },
+                        { id: "item_113", name: "مكس", image: "images/مكس كريب.jpg", price: "٧٠٠٠ د.ع", description: "" }
+                    ]},
+                    "sec_1_6": { name: "الوافل", icon: "🧇", items: [
+                        { id: "item_114", name: "وافل جوكليت", image: "images/جوكليت وافل.jpg", price: "٦٠٠٠ د.ع", description: "" },
+                        { id: "item_115", name: "وافل كندر", image: "images/كندر وافل.jpg", price: "٦٠٠٠ د.ع", description: "" },
+                        { id: "item_116", name: "وافل لوتس", image: "images/لوتس وافل.jpg", price: "٦٠٠٠ د.ع", description: "" },
+                        { id: "item_117", name: "وافل أوريو", image: "images/أوريو وافل.jpg", price: "٦٠٠٠ د.ع", description: "" },
+                        { id: "item_118", name: "وافل مكس", image: "images/مكس وافل.jpg", price: "٧٠٠٠ د.ع", description: "" }
+                    ]}
+                }},
+                "main_2": { name: "الاراكيل", banner: "https://via.placeholder.com/600x120/A1887F/EDE7F6?Text=Shisha+Lounge", secondaryCategories: {
+                    "sec_2_0": { name: "VIP", icon: "💨", items: [
+                        { id: "item_119", name: "VIP", image: "images/hookah vip.jpg", price: "٢٥٠٠٠ د.ع", description: "انكليزي، علكة، ليمون نعناع، علكة نعناع، بلوبيري، عنب، تفاحتين، فيروز، ليدي (للبنات فقط)، حمضيات، باونتي." }
+                    ]},
+                    "sec_2_1": { name: "اركيلة طبيعي", icon: "💨", items: [
+                        { id: "item_120", name: "اركيلة طبيعي", image: "images/hookah2.jpg", price: "١٦٠٠٠ د.ع", description: "انكليزي، علكة، ليمون نعناع، علكة نعناع، بلوبيري، عنب، تفاحتين، فيروز، ليدي (للبنات فقط)، حمضيات، باونتي." }
+                    ]},
+                    "sec_2_2": { name: "اركيلة", icon: "💨", items: [
+                        { id: "item_121", name: "اركيلة", image: "images/hookah3.jpg", price: "١٠٠٠٠ د.ع", description: "انكليزي، علكة، ليمون نعناع، علكة نعناع، بلوبيري، عنب، تفاحتين، فيروز، ليدي (للبنات فقط)، حمضيات، باونتي." }
+                    ]}
+                }}
+            };
+            let fayrouzCurrentMainCategoryKey = Object.keys(fayrouzMenuData)[0];
+            let fayrouzCurrentSecondaryCategoryKey = null;
+
+            function fayrouzRenderMainCategories() { 
+                fayrouzMainCategoriesNav.innerHTML = '';
+                for (const key in fayrouzMenuData) {
+                    const category = fayrouzMenuData[key];
+                    const btn = document.createElement('button');
+                    btn.className = 'main-category-btn';
+                    btn.textContent = category.name;
+                    btn.onclick = () => fayrouzSelectMainCategory(key);
+                    if (key === fayrouzCurrentMainCategoryKey) btn.classList.add('active');
+                    fayrouzMainCategoriesNav.appendChild(btn);
+                }
+            }
+            function fayrouzSelectMainCategory(key, fromBackButton = false) {
+                fayrouzCurrentMainCategoryKey = key;
+                const mainCatData = fayrouzMenuData[key];
+                fayrouzCurrentSecondaryCategoryKey = Object.keys(mainCatData.secondaryCategories)[0];
+                if (mainCatData.banner) fayrouzBannerImageEl.style.backgroundImage = `url('${mainCatData.banner}')`;
+                else fayrouzBannerImageEl.style.backgroundImage = `url('https://via.placeholder.com/600x120/D7CCC8/A1887F?Text=Fayrouz+Cafe')`;
+                fayrouzRenderMainCategories(); 
+                fayrouzRenderSecondaryCategories();
+                fayrouzSelectSecondaryCategory(fayrouzCurrentSecondaryCategoryKey, fromBackButton);
+            }
+            function fayrouzRenderSecondaryCategories() {
+                fayrouzSecondaryCategoriesNavContainer.innerHTML = '';
+                const mainCatData = fayrouzMenuData[fayrouzCurrentMainCategoryKey];
+                for (const key in mainCatData.secondaryCategories) {
+                    const subCategory = mainCatData.secondaryCategories[key];
+                    const btn = document.createElement('div');
+                    btn.className = 'secondary-category-btn';
+                    btn.innerHTML = `<span class="icon">${subCategory.icon || '❓'}</span><span class="text">${subCategory.name}</span>`;
+                    btn.onclick = () => fayrouzSelectSecondaryCategory(key);
+                    if (key === fayrouzCurrentSecondaryCategoryKey) btn.classList.add('active');
+                    fayrouzSecondaryCategoriesNavContainer.appendChild(btn);
+                }
+                const activeSecondaryBtn = fayrouzSecondaryCategoriesNavContainer.querySelector('.secondary-category-btn.active');
+                if (activeSecondaryBtn) activeSecondaryBtn.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+            }
+            function fayrouzSelectSecondaryCategory(key, fromBackButton = false) {
+                fayrouzCurrentSecondaryCategoryKey = key;
+                const subCategoryData = fayrouzMenuData[fayrouzCurrentMainCategoryKey].secondaryCategories[key];
+                fayrouzSelectedCategoryTitle.textContent = subCategoryData.name;
+                fayrouzRenderSecondaryCategories(); 
+                fayrouzRenderMenuItems(subCategoryData.items, fromBackButton);
+            }
+            function fayrouzRenderMenuItems(items, fromBackButton = false) {
+                fayrouzMenuItemsGrid.innerHTML = ''; 
+                if (!items || items.length === 0) {
+                    fayrouzMenuItemsGrid.innerHTML = "<p style='text-align:center; grid-column: 1 / -1;'>لا توجد عناصر لعرضها في هذه الفئة.</p>"; return;
+                }
+                items.forEach((item, index) => {
+                    const card = document.createElement('div');
+                    card.className = 'menu-item-card';
+                    if (fromBackButton) { card.style.animation = 'none'; card.style.opacity = '1'; card.style.transform = 'translateY(0)'; }
+                    else { card.style.animationDelay = `${index * 0.05}s`; }
+                    const imageUrl = item.image && item.image !== 'images/' ? item.image : 'https://via.placeholder.com/150/EEEEEE/AAAAAA?Text=No+Image';
+                    card.innerHTML = `<img src="${imageUrl}" alt="${item.name}" class="item-image" loading="lazy" onerror="this.onerror=null;this.src='https://via.placeholder.com/150/EEEEEE/AAAAAA?Text=No+Image';"><div class="item-name-bar">${item.name}</div>`;
+                    card.onclick = (event) => {
+                        const clickedCard = event.currentTarget;
+                        clickedCard.classList.add('pop-animation');
+                        setTimeout(() => { clickedCard.classList.remove('pop-animation'); }, 300); 
+                        fayrouzOpenLightbox(item);
+                    };
+                    fayrouzMenuItemsGrid.appendChild(card);
+                });
+            }
+            window.fayrouzOpenLightbox = function(item) { 
+                const imageUrl = item.image && item.image !== 'images/' ? item.image : 'https://via.placeholder.com/400x200/EEEEEE/AAAAAA?Text=No+Image';
+                fayrouzLightboxImageEl.src = imageUrl;
+                fayrouzLightboxImageEl.onerror = function() { this.onerror=null; this.src='https://via.placeholder.com/400x200/EEEEEE/AAAAAA?Text=No+Image'; };
+                fayrouzLightboxImageEl.alt = item.name;
+                fayrouzLightboxTitleEl.textContent = item.name;
+                fayrouzLightboxDescriptionEl.textContent = item.description || "";
+                fayrouzLightboxPriceEl.textContent = item.price;
+                fayrouzLightboxModalEl.classList.add('visible');
+                document.getElementById('fayrouzMenuPage').style.overflow = 'hidden'; 
+            }
+            window.fayrouzCloseLightbox = function() { 
+                fayrouzLightboxModalEl.classList.remove('visible');
+                document.getElementById('fayrouzMenuPage').style.overflow = '';
+            }
+            window.fayrouzGoBackToStart = function() { 
+                const firstMainCategoryKey = Object.keys(fayrouzMenuData)[0];
+                fayrouzSelectMainCategory(firstMainCategoryKey, true); 
+                const appContainer = document.querySelector('#fayrouzMenuPage .app-container');
+                if (appContainer) appContainer.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+            
+            if(fayrouzScrollLeftArrow) fayrouzScrollLeftArrow.addEventListener('click', () => { fayrouzSecondaryCategoriesNavContainer.scrollBy({ left: -200, behavior: 'smooth' }); });
+            if(fayrouzScrollRightArrow) fayrouzScrollRightArrow.addEventListener('click', () => { fayrouzSecondaryCategoriesNavContainer.scrollBy({ left: 200, behavior: 'smooth' }); });
+            if(fayrouzLightboxModalEl) fayrouzLightboxModalEl.addEventListener('click', (event) => { if (event.target === fayrouzLightboxModalEl) fayrouzCloseLightbox(); });
+            document.addEventListener('keydown', (event) => { if (event.key === "Escape" && fayrouzLightboxModalEl && fayrouzLightboxModalEl.classList.contains('visible')) fayrouzCloseLightbox(); });
+
+            if (Object.keys(fayrouzMenuData).length > 0) {
+                fayrouzCurrentMainCategoryKey = Object.keys(fayrouzMenuData)[0];
+                const mainCatData = fayrouzMenuData[fayrouzCurrentMainCategoryKey];
+                if (mainCatData && mainCatData.secondaryCategories && Object.keys(mainCatData.secondaryCategories).length > 0) {
+                    fayrouzCurrentSecondaryCategoryKey = Object.keys(mainCatData.secondaryCategories)[0];
+                }
+                fayrouzSelectMainCategory(fayrouzCurrentMainCategoryKey);
+            } else {
+                if(fayrouzMainCategoriesNav) fayrouzMainCategoriesNav.innerHTML = `<p style='color:var(--brand-white-text); text-align:center; width:100%; padding:10px;'>لا توجد فئات رئيسية.</p>`;
+                if(fayrouzSecondaryCategoriesNavContainer) fayrouzSecondaryCategoriesNavContainer.innerHTML = `<p style='color:var(--brand-white-text); text-align:center; width:100%; padding:10px;'>لا توجد فئات ثانوية.</p>`;
+                if(fayrouzMenuItemsGrid) fayrouzMenuItemsGrid.innerHTML = "<p style='text-align:center; width:100%; padding:20px;'>القائمة فارغة.</p>";
+            }
+        }
+
+        // --- EATWELL MENU SCRIPT ---
+        function initEatwellMenu() {
+            // All Eatwell variables and functions as previously defined
+            const eatwellMainCategoriesNav = document.getElementById('eatwellMainCategoriesNav');
+            const eatwellSecondaryCategoriesNavContainer = document.getElementById('eatwellSecondaryCategoriesNavContainer');
+            const eatwellSelectedCategoryTitle = document.getElementById('eatwellSelectedCategoryTitle');
+            const eatwellMenuItemsGrid = document.getElementById('eatwellMenuItemsGrid');
+            const eatwellBannerImageEl = document.getElementById('eatwellBannerImage');
+            const eatwellScrollLeftArrow = document.getElementById('eatwellScrollLeftArrow');
+            const eatwellScrollRightArrow = document.getElementById('eatwellScrollRightArrow');
+            const eatwellLightboxModalEl = document.getElementById('eatwellLightboxModal'); 
+            const eatwellLightboxImageEl = document.getElementById('eatwellLightboxImage'); 
+            const eatwellLightboxTitleEl = document.getElementById('eatwellLightboxTitle'); 
+            const eatwellLightboxDescriptionEl = document.getElementById('eatwellLightboxDescription'); 
+            const eatwellLightboxPriceEl = document.getElementById('eatwellLightboxPrice'); 
+
+            const eatwellMenuData = {
+                "mainCat_0": {
+                    name: "وجبات الطعام",
+                    banner: "https://via.placeholder.com/600x150/97b447/FFFFFF?Text=EatWell%20Meals",
+                    secondaryCategories: {
+                        "secCat_0_0": { name: "وجبات الفطور", icon: "🍳", items: [ { id: "ew_item_0", name: "أومليت سبانخ 1", image: "أومليت_سبانخ_1.jpg", price: "٤٠٠٠ د.ع", description: "بيض مقلي عدد 2 - سبانخ 100غ بندورة-خس" }, { id: "ew_item_1", name: "شكشوكة", image: "شكشوكة_2.jpg", price: "٤٠٠٠ د.ع", description: "بيض مقلي عدد 2 - بندوة-خس-فليفلة ألوان" }, { id: "ew_item_2", name: "سابوي ساندويش", image: "سابوي_ساندويش_3.jpg", price: "٤٥٠٠ د.ع", description: "سلامي-بندوره-خس-بصل-جبنة شيد-مخلل خيار" }, { id: "ew_item_3", name: "كلوب ساندويش", image: "كلوب_ساندويش_4.jpg", price: "٤٥٠٠ د.ع", description: "خس-بندورة-بصل-بيض-سلامي-مخلل خيار" } ] },
+                        "secCat_0_1": { name: "الأطباق الرئيسية", icon: "🍽️", items: [ { id: "ew_item_4", name: "ستيك دجاج", image: "ستيك_دجاج_1.jpg", price: "٩٠٠٠ د.ع", description: "دجاج 150غ- رز200غ -سلطة 100غ -صوص فطر-كالوري345- بروتين 46غ- كارب 49غ- دهون 5غ" }, { id: "ew_item_5", name: "ستيك دجاج مع سبانخ", image: "ستيك_دجاج_مع_سبانخ_2.jpg", price: "١٠٠٠٠ د.ع", description: "دجاج 150غ- سبانخ 150غ - سلطة 100غ- صوص فطر-كالوري315- بروتين 46- 46غ" }, { id: "ew_item_6", name: "ستيك دجاج مع ماش بوتيتو", image: "ستيك_دجاج_مع_ماش_بوتيتو_3.jpg", price: "١٠٠٠٠ د.ع", description: "ستيك دجاج 150غ- ماش بوتيتو 150غ- سلطة- كالوري 350- بروتين 46غ- كارب 60غ- دهون 5غ" }, { id: "ew_item_7", name: "دجاج بوريتو", image: "دجاج_بوريتو_4.jpg", price: "٩٠٠٠ د.ع", description: "دجاج 150غ-رز 200غ-بصل-فلفل الوان-فطر-سلطة-كالوري 345-بروتين 46غ-كارب 49غ-دهون 5غ" }, { id: "ew_item_8", name: "ستيك لحم", image: "ستيك_لحم_5.jpg", price: "١٣٠٠٠ د.ع", description: "لحم 150غ- رز200غ -سلطة 100غ -صوص فطر-كالوري415- بروتين 48غ- كارب 49غ- دهون 11غ" }, { id: "ew_item_9", name: "ستيك لحم مع سبانخ", image: "ستيك_لحم_مع_سبانخ_6.jpg", price: "١٤٥٠٠ د.ع", description: "لحم 150غ- سبانخ 150غ - سلطة 100غ- صوص فطر-كالوري415- بروتين 44- كارب 49-دهون 11غ" }, { id: "ew_item_10", name: "ستيك لحم مع ماش بوتيتو", image: "ستيك_لحم_مع_ماش_بوتيتو_7.jpg", price: "١٤٠٠٠ د.ع", description: "ستيك دجاج 150غ- ماش بوتيتو 150غ- سلطة- كالوري 350- بروتين 46غ- كارب 60غ- دهون 5غ" },  { id: "ew_item_11", name: "بيف تشيلي", image: "بيف_تشيلي_8.jpg", price: "١٢٠٠٠ د.ع", description: "5 كرات لحم 150غ-رز 200غ-صوص احمر (فاصوليا حمراء،حمص،فلفل الوان-بصل-طماطا)-كالوي 240-بروتين 39غ-كارب57-دهون 13غ" }, { id: "ew_item_12", name: "ديمي بيف ستيك", image: "ديمي_بيف_ستيك_9.jpg", price: "١٣٠٠٠ د.ع", description: "لحم 150غ-بطاطا ويجز 150غ-خضار مسلوق-صوص ديمي - كالوري 415-بروتين 39-كارب 47-دهون 10غ" }, { id: "ew_item_13", name: "بوريتو لحم", image: "بوريتو_لحم_10.jpg", price: "١٣٥٠٠ د.ع", description: "لحم 150غ-رز 200غ-سلطة 100غ- بصل-فلفل الوان-فطر-كالوري 500غ-بروتين48-كارب 49غ-دهون 11غ" }, { id: "ew_item_14", name: "سالمون مع كينوا", image: "سالمون_مع_كينوا_11.jpg", price: "١٧٠٠٠ د.ع", description: "سالمون 200غ-رز أو كينوا 200غ-صوص-سلطة" }, { id: "ew_item_15", name: "تونا بول مع رز", image: "تونا_بول_مع_رز_12.jpg", price: "٨٠٠٠ د.ع", description: "تونا 160غ- رز 200غ-فاصوليا حمرة-فلفل الوان-ذرة-كالوري 450غ- بروتين 45غ-كارب 39غ-دهون 20غ" }, { id: "ew_item_16", name: "فيليه سمك مع رز", image: "فيليه_سمك_مع_رز_13.jpg", price: "١٠٠٠٠ د.ع", description: "قطعة فيليه سمك - رز 200غ-سلطة-كالوري 460غ-بروتين 45غ-كارب 39غ-دهون 20غ" }, { id: "ew_item_17", name: "ريزو لحم", image: "ريزو_لحم_14.jpg", price: "١٣٠٠٠ د.ع", description: "لحم 150غ-رز 200غ-سلطة-صوص-كالوري 400غ- بروتين 40غ-كارب 38غ-دهون 10غ" }, { id: "ew_item_18", name: "ريزو دجاج", image: "ريزو_دجاج_14.jpg", price: "١٤٠٠٠ د.ع", description: "دجاج 150غ-رز 200غ-سلطة-صوص-كالوري 400غ- بروتين 40غ-كارب 38غ-دهون 10غ" } ] },
+                        "secCat_0_2": { name: "الساندويتش", icon: "🥪", items: [ { id: "ew_item_19", name: "حلوم", image: "حلوم_1.jpg", price: "٨٠٠٠ د.ع", description: "حلوم- صمون اسمر- روكا- طماطة- كالوري 400غ- بروتين 30- كارب 33غ- دهون 9" }, { id: "ew_item_20", name: "أفوكادو دجاج", image: "افوكادو_دجاج_2.jpg", price: "٦٠٠٠ د.ع", description: "دجاج 120غ- صمون اسمر- صوص خاص- افوكادو- خس- طماطة- بطاطا مشوية- كالوري 620غ- بروتين 41غ- كارب 72غ- دهون 19غ" }, { id: "ew_item_21", name: "سلامي بيف", image: "سلامي_بيف_3.jpg", price: "٨٠٠٠ د.ع", description: "لحم 120غ- صمون اسمر- كريم توم- سلامي- ذرة- كالوري 420غ- بروتين 90غ- كارب 56غ- دهون 18غ" }, { id: "ew_item_22", name: "شاورما لحم", image: "شاورما_لحم_4.jpg", price: "٧٥٠٠ د.ع", description: "لحم 120غ- خبز تورتيلا اسمر- صوص طحينية- معدنوس- بصل- مخلل خيار- كالوري 440غ-بروتين 37- كارب 20غ- دهون 22غ" }, { id: "ew_item_23", name: "شاورما دجاج", image: "شاروما_دجاج_5.jpg", price: "٦٠٠٠ د.ع", description: "دجاج 120غ- خبز تورتيلا اسمر- كريم توم- مخلل خيار- كالوري 440غ-بروتين 37- كارب 20غ- دهون 22غ" }, { id: "ew_item_24", name: "شيش طاوق", image: "شيش_طاوق_6.jpg", price: "٦٠٠٠ د.ع", description: "دجاج 120غ- كول سلو سلطة- خبز تورتيلا- كالوري 620غ- بروتين 40غ- كارب 72غ- دهون 19غ" }, { id: "ew_item_25", name: "ستيك لحم", image: "ستيك_لحم_7.jpg", price: "٧٠٠٠ د.ع", description: "لحم 120غ- صمون اسمر- بصل- فطر- كريم توم- كالوري 510غ-بروتين 90غ- كارب 66غ- دهون 18غ" }  ] },
+                        "secCat_0_3": { name: "السلطات", icon: "🥗", items: [ { id: "ew_item_26", name: "سلطة كينوا", image: "سلطة_كينوا_1.jpg", price: "٦٠٠٠ د.ع", description: "كينوا- مكس كرين- طماطم كرزية- صوص- كالوري 288غ- بروتين 26غ- كارب 22غ- دهون 11غ" }, { id: "ew_item_27", name: "سلطة روبيان", image: "سلطة_روبيان_2.jpg", price: "١٢٠٠٠ د.ع", description: "روبيان- مكس كرين- فلفل الوان- لهانة- طماطم كرزية- كالوري 60غ- بروتين 24غ- دهون 1غ" }, { id: "ew_item_28", name: "سلطة أفوكادو دجاج", image: "سلطة_أفاكادو_دجاج_3.jpg", price: "٩٠٠٠ د.ع", description: "دجاج 110غ- مكس كرين- طماطم كرزية- افوكادو- صوص- كالوري 245غ- بروتين 29غ- كارب 4غ-دهون 10غ" }, { id: "ew_item_29", name: "سلطة روكا مع ستيك لحم", image: "سلطة_روكا_مع_ستيك_لحم_4.jpg", price: "١٠٠٠٠ د.ع", description: "لحم 110غ- جرجير- طماطم كرزية- بصل احمر- جبنة باميزان- صوص- كالوري 250غ- بروتين 30غ- دهون 12غ" }, { id: "ew_item_30", name: "سلطة تونا", image: "سلطة_تونا_5.jpg", price: "٧٠٠٠ د.ع", description: "تونا- فلفل الوان- مكس كرين- ذرة- بصل- صوص- كالوري 60غ- بروتين 24غ- دهون 1غ" }, { id: "ew_item_31", name: "سلطة يونانية", image: "سلطة_يونانية_6.jpg", price: "٥٠٠٠ د.ع", description: "مكس كرين- جبنة فتة- خيار- طماطة- بصل- زيتون اسود شرائح- ذرة- صوص- كالوري 90غ- بروتين 15غ- كارب 4غ- دهون 10غ" } ] },
+                        "secCat_0_4": { name: "البرجر", icon: "🍔", items: [ { id: "ew_item_32", name: "برغر لحم باربكيو", image: "برغر_لحم_باربكيو_1.jpg", price: "٩٠٠٠ د.ع", description: "لحم 150غ- خس- طماطة- بصل- مخلل خيار-جبنة -مارتديلا سلامي- صوص باربكيو- كالوري 753غ- بروتين 41غ- كارب 59غ- دهون 48غ" }, { id: "ew_item_33", name: "برغر لحم بالفطر", image: "برغر_لحم_بالفطر_2.jpg", price: "٧٥٠٠ د.ع", description: "لحم 150غ- خس- طماطة- بصل- مخلل خيار- جبنة- صوص الفطر-كالوري 753غ- بروتين 41غ- كارب 59غ- دهون 48غ" }, { id: "ew_item_34", name: "برغر لحم هوني", image: "برغر_لحم_هوني_3.jpg", price: "٧٥٠٠ د.ع", description: "لحم 150غ- خس- طماطة- بصل- مخلل خيار- جبنة- صوص هوني- كالوري 753غ- بروتين 41غ- كارب 59غ- دهون 48غ" }, { id: "ew_item_35", name: "برغر لحم هالبينو", image: "برغر_لحم_هالبينو_4.jpg", price: "٨٠٠٠ د.ع", description: "لحم 150غ- خس- طماطة- بصل- مخلل خيار- جبنة- هالبينو- تشيلي صوص- كالوري 753غ- بروتين 41غ- كارب 59غ- دهون 48غ" }, { id: "ew_item_36", name: "برغر دجاج كلاسيك", image: "برغر_دجاج_كلاسيك_5.jpg", price: "٧٠٠٠ د.ع", description: "دجاج 150غ- خس- طماطة- بصل- مخلل خيار- جبنة-صوص " }, { id: "ew_item_37", name: "برغر دجاج بوفالو", image: "برغر_دجاج_بوفالو_6.jpg", price: "٧٥٠٠ د.ع", description: "دجاج 150غ- خس- طماطة- بصل- مخلل خيار- جبنة- صوص بوفالو- كالوري 753غ- بروتين 41غ- كارب 59غ- دهون 48غ" }, { id: "ew_item_38", name: "برغر دجاج باربكيو", image: "برغر_دجاج_باربكيو_7.jpg", price: "٧٥٠٠ د.ع", description: "دجاج 150غ- خس- طماطة- بصل- مخلل خيار- جبنة- مارتديلا سلامي- صوص باربكيو- كالوري 753غ- بروتين 41غ- كارب 59غ- دهون 48غ" }, { id: "ew_item_39", name: "برغر دجاج سويت تشيلي", image: "برغر_دجاج_سويت_تشيلي_8.jpg", price: "٧٥٠٠ د.ع", description: "دجاج 150غ- خس- طماطة- بصل- مخلل خيار- جبنة- صوص سويت تشيلي- كالوري 753غ- بروتين 41غ- كارب 59غ- دهون 48غ" } ] },
+                        "secCat_0_5": { name: "البيتزا", icon: "🍕", items: [ { id: "ew_item_40", name: "بيتزا خضار", image: "بيتزا_خضار_1.jpg", price: "١٠٠٠٠ د.ع", description: "عجينة بنية- صلصة بيتزا- جبنة موزريلا- فلفل الوان- فطر- ذرة- زيتون اسود- كالوري 700غ- بروتين 11غ- الياف 8غ- دهون 12غ" }, { id: "ew_item_41", name: "بيتزا ببروني", image: "بيتزا_ببروني_2.jpg", price: "١٢٠٠٠ د.ع", description: "عجينة بنية- صلصة بيتزا- جبنة موزريلا- ببروني- كالوري 785غ- بروتين 13غ- الياف 3غ- دهون 12غ" }, { id: "ew_item_42", name: "بيتزا دجاج مشروم سلامي", image: "بيتزا_دجاج_مشروم_سلامي_3.jpg", price: "١٣٠٠٠ د.ع", description: "عجينة بنية- صلصة بيتزا- جبنة موزريلا-دجاج- سلامي- ذرة- مشروم- كالوري 795غ- بروتين 12غ- الياف 4غ- دهون 10غ" }, { id: "ew_item_43", name: "بيتزا لحم", image: "بيتزا_لحم_4.jpg", price: "١٤٠٠٠ د.ع", description: "عجينة بنية- صلصة بيتزا- جبنة موزريلا- لحم- كالوري 785غ- بروتين 13غ- الياف 3غ- دهون 12غ" }, { id: "ew_item_44", name: "بيتزا جبن", image: "بيتزا_جبن_5.jpg", price: "١١٠٠٠ د.ع", description: "عجينة بنية- صلصة بيتزا- جبنة موزريلا- جبن تشيدر وموزريلا- كالوري 850غ- بروتين 14غ- الياف 3- دهون 14غ" } ] },
+                        "secCat_0_6": { name: "الباستا", icon: "🍝", items: [ { id: "ew_item_45", name: "دجاج بيستو", image: "دجاج_بيستو_1.jpg", price: "١٠٠٠٠ د.ع", description: "دجاج 110غ- باستا 200غ- صوص بيستو- جبنة بارميزون- كالوري 890غ- بروتين 48غ- كارب 73غ- دهون 40غ" }, { id: "ew_item_46", name: "بيف بيني", image: "بيف_بيني_2.jpg", price: "١٢٠٠٠ د.ع", description: "لحم 110غ- باستا 200غ- صوص بيني- جبنة بارميزون- كالوري 960غ- بروتين 54غ- كارب 142- دهون 18غ" }, { id: "ew_item_47", name: "دجاج فوتوشيني", image: "دجاج_فوتوشيني_3.jpg", price: "١٠٠٠٠ د.ع", description: "دجاج 110غ- باستا 200غ- صوص ابيض- كالوري 700غ- بروتين 44غ- كارب 71غ- دهون 20غ" } ] },
+                        "secCat_0_7": { name: "الشوربات", icon: "🥣", items: [ { id: "ew_item_48", name: "شوربة العدس", image: "شوربة_العدس_1.jpg", price: "٤٥٠٠ د.ع", description: "" }, { id: "ew_item_49", name: "شوربة خضار", image: "شوربة_خضار_2.jpg", price: "٥٠٠٠ د.ع", description: "" } ] },
+                        "secCat_0_8": { name: "الحلويات", icon: "🍰", items: [ { id: "ew_item_50", name: "اكلير", image: "اكلير_1.jpg", price: "٧٠٠٠ د.ع", description: "" }, { id: "ew_item_51", name: "براونيز", image: "براونيز_2.jpg", price: "٨٠٠٠ د.ع", description: "" }, { id: "ew_item_52", name: "تشيز كيك", image: "تشيز_كيك_3.jpg", price: "٦٥٠٠ د.ع", description: "" } ] },
+                        "secCat_0_9": { name: "الاضافات", icon: "➕", items: [ { id: "ew_item_53", name: "شرحية لحم 150 غرام", image: "الوجبات_الاضافية_1.jpg", price: "٥٠٠٠ د.ع", description: "" }, { id: "ew_item_54", name: "قطعة ستيك دجاج 150 غرام", image: "الوجبات_الاضافية_2.jpg", price: "٣٥٠٠ د.ع", description: "" }, { id: "ew_item_55", name: "قطعة سلمون 150 غرام", image: "الوجبات_الاضافية_3.jpg", price: "٨٠٠٠ د.ع", description: "" }, { id: "ew_item_56", name: "بطاطس ويجز", image: "الوجبات_الاضافية_4.jpg", price: "٢٧٥٠ د.ع", description: "" }, { id: "ew_item_57", name: "بطاطس مشوية", image: "الوجبات_الاضافية_5.jpg", price: "٢٠٠٠ د.ع", description: "" }, { id: "ew_item_58", name: "أرز", image: "", price: "٢٠٠٠ د.ع", description: "" }  ] }
+                    }
+                },
+                "mainCat_1": {
+                    name: "المشروبات",
+                    banner: "https://via.placeholder.com/600x150/97b447/FFFFFF?Text=EatWell%20Drinks",
+                    secondaryCategories: {
+                        "secCat_1_0": { name: "العصائر والسموذي", icon: "🍹", items: [ { id: "ew_item_59", name: "عصير برتقال", image: "عصير_برتقال_1.jpg", price: "٥٠٠٠ د.ع", description: "" }, { id: "ew_item_60", name: "عصير برتقال وجزر", image: "عصير_برتقال_وجزر_2.jpg", price: "٥٠٠٠ د.ع", description: "" }, { id: "ew_item_61", name: "عصير رمان", image: "عصير_رمان_3.jpg", price: "٥٠٠٠ د.ع", description: "" }, { id: "ew_item_62", name: "فروالة سموذي", image: "فراولة_سموذي_4.jpg", price: "٦٥٠٠ د.ع", description: "" }, { id: "ew_item_63", name: "بلوبيري سموذي", image: "بلوبيري_سموذي_5.jpg", price: "٦٥٠٠ د.ع", description: "" } ] }
+                    }
+                }
+            };
+            let eatwellCurrentMenuData = eatwellMenuData; 
+            let eatwellCurrentMainCategoryKey = Object.keys(eatwellCurrentMenuData)[0];
+            let eatwellCurrentSecondaryCategoryKey = null;
+
+            function eatwellRenderMainCategories() { 
+                eatwellMainCategoriesNav.innerHTML = '';
+                for (const key in eatwellCurrentMenuData) {
+                    const category = eatwellCurrentMenuData[key];
+                    const btn = document.createElement('button');
+                    btn.className = 'main-category-btn';
+                    btn.textContent = category.name;
+                    btn.onclick = () => eatwellSelectMainCategory(key);
+                    if (key === eatwellCurrentMainCategoryKey) btn.classList.add('active');
+                    eatwellMainCategoriesNav.appendChild(btn);
+                }
+            }
+            function eatwellSelectMainCategory(key, fromBackButton = false) {
+                eatwellCurrentMainCategoryKey = key;
+                const mainCatData = eatwellCurrentMenuData[key];
+                if (mainCatData.secondaryCategories && Object.keys(mainCatData.secondaryCategories).length > 0) {
+                    eatwellCurrentSecondaryCategoryKey = Object.keys(mainCatData.secondaryCategories)[0];
+                } else { eatwellCurrentSecondaryCategoryKey = null; }
+                if (eatwellBannerImageEl && mainCatData.banner) { eatwellBannerImageEl.style.backgroundImage = `url('${mainCatData.banner}')`; }
+                else if (eatwellBannerImageEl) { eatwellBannerImageEl.style.backgroundImage = `url('https://via.placeholder.com/600x150/A5D6A7/388E3C?Text=EatWell+Fresh')`;}
+                eatwellRenderMainCategories(); eatwellRenderSecondaryCategories();
+                if(eatwellCurrentSecondaryCategoryKey) { eatwellSelectSecondaryCategory(eatwellCurrentSecondaryCategoryKey, fromBackButton); }
+                else {
+                    eatwellSelectedCategoryTitle.textContent = mainCatData.name;
+                    if(mainCatData.items && mainCatData.items.length > 0) { eatwellRenderMenuItems(mainCatData.items, fromBackButton); }
+                    else { eatwellMenuItemsGrid.innerHTML = "<p style='text-align:center; grid-column: 1 / -1;'>لا توجد عناصر لهذه الفئة.</p>"; }
+                }
+            }
+            function eatwellRenderSecondaryCategories() {
+                const headerWrapper = document.querySelector('#eatwellMenuPage .header-secondary-wrapper');
+                if (!eatwellSecondaryCategoriesNavContainer || !headerWrapper) return;
+                eatwellSecondaryCategoriesNavContainer.innerHTML = '';
+                const mainCatData = eatwellCurrentMenuData[eatwellCurrentMainCategoryKey];
+                if (!mainCatData.secondaryCategories || Object.keys(mainCatData.secondaryCategories).length === 0) {
+                    headerWrapper.style.height = '0'; headerWrapper.style.padding = '0'; headerWrapper.style.border = 'none'; eatwellSecondaryCategoriesNavContainer.style.display = 'none'; return;
+                }
+                headerWrapper.style.height = 'var(--eatwell-header-secondary-height)'; headerWrapper.style.padding = ''; headerWrapper.style.border = ''; eatwellSecondaryCategoriesNavContainer.style.display = 'flex';
+                for (const key in mainCatData.secondaryCategories) {
+                    const subCategory = mainCatData.secondaryCategories[key];
+                    const btn = document.createElement('div');
+                    btn.className = 'secondary-category-btn';
+                    btn.innerHTML = `<span class="icon">${subCategory.icon || '❓'}</span><span class="text">${subCategory.name}</span>`;
+                    btn.onclick = () => eatwellSelectSecondaryCategory(key);
+                    if (key === eatwellCurrentSecondaryCategoryKey) btn.classList.add('active');
+                    eatwellSecondaryCategoriesNavContainer.appendChild(btn);
+                }
+                const activeSecondaryBtn = eatwellSecondaryCategoriesNavContainer.querySelector('.secondary-category-btn.active');
+                if (activeSecondaryBtn) activeSecondaryBtn.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+            }
+            function eatwellSelectSecondaryCategory(key, fromBackButton = false) {
+                eatwellCurrentSecondaryCategoryKey = key;
+                const subCategoryData = eatwellCurrentMenuData[eatwellCurrentMainCategoryKey].secondaryCategories[key];
+                eatwellSelectedCategoryTitle.textContent = subCategoryData.name;
+                eatwellRenderSecondaryCategories(); eatwellRenderMenuItems(subCategoryData.items, fromBackButton);
+            }
+            function eatwellRenderMenuItems(items, fromBackButton = false) {
+                eatwellMenuItemsGrid.innerHTML = '';
+                if (!items || items.length === 0) { eatwellMenuItemsGrid.innerHTML = "<p style='text-align:center; grid-column: 1 / -1;'>لا توجد عناصر لعرضها في هذه الفئة.</p>"; return; }
+                items.forEach((item, index) => {
+                    const card = document.createElement('div');
+                    card.className = 'menu-item-card';
+                    if (fromBackButton) { card.style.animation = 'none'; card.style.opacity = '1'; card.style.transform = 'translateY(0)';}
+                    else { card.style.animationDelay = `${index * 0.05}s`; }
+                    const imageName = item.image ? String(item.image).trim() : '';
+                    const imageUrl = imageName !== '' ? 'images/' + imageName : 'https://via.placeholder.com/150/EEEEEE/AAAAAA?Text=No+Image';
+                    card.innerHTML = `<img src="${imageUrl}" alt="${item.name}" class="item-image" loading="lazy" onerror="this.onerror=null;this.src='https://via.placeholder.com/150/EEEEEE/AAAAAA?Text=No+Image'; console.error('Failed to load image: ${imageUrl}');"><div class="item-name-bar">${item.name}</div>`;
+                    card.onclick = (event) => {
+                        const clickedCard = event.currentTarget;
+                        clickedCard.classList.add('pop-animation');
+                        setTimeout(() => { clickedCard.classList.remove('pop-animation'); }, 300);
+                        eatwellOpenLightbox(item);
+                    };
+                    eatwellMenuItemsGrid.appendChild(card);
+                });
+            }
+            window.eatwellOpenLightbox = function(item) { 
+                if (!eatwellLightboxModalEl || !eatwellLightboxImageEl || !eatwellLightboxTitleEl || !eatwellLightboxDescriptionEl || !eatwellLightboxPriceEl) return;
+                const imageName = item.image ? String(item.image).trim() : '';
+                const imageUrl = imageName !== '' ? 'images/' + imageName : 'https://via.placeholder.com/400x200/EEEEEE/AAAAAA?Text=No+Image';
+                eatwellLightboxImageEl.src = imageUrl;
+                eatwellLightboxImageEl.onerror = function() { this.onerror=null; this.src='https://via.placeholder.com/400x200/EEEEEE/AAAAAA?Text=No+Image'; };
+                eatwellLightboxImageEl.alt = item.name;
+                eatwellLightboxTitleEl.textContent = item.name;
+                eatwellLightboxDescriptionEl.textContent = item.description || "";
+                eatwellLightboxPriceEl.textContent = item.price;
+                eatwellLightboxModalEl.classList.add('visible');
+                document.getElementById('eatwellMenuPage').style.overflow = 'hidden'; 
+            }
+            window.eatwellCloseLightbox = function() { 
+                if (!eatwellLightboxModalEl) return;
+                eatwellLightboxModalEl.classList.remove('visible');
+                document.getElementById('eatwellMenuPage').style.overflow = '';
+            }
+            window.eatwellGoBackToStart = function() { 
+                const firstMainCategoryKey = Object.keys(eatwellCurrentMenuData)[0];
+                eatwellSelectMainCategory(firstMainCategoryKey, true);
+                const appContainer = document.querySelector('#eatwellMenuPage .app-container');
+                if(appContainer) appContainer.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+
+            if(eatwellScrollLeftArrow) eatwellScrollLeftArrow.addEventListener('click', () => { eatwellSecondaryCategoriesNavContainer.scrollBy({ left: -200, behavior: 'smooth' }); });
+            if(eatwellScrollRightArrow) eatwellScrollRightArrow.addEventListener('click', () => { eatwellSecondaryCategoriesNavContainer.scrollBy({ left: 200, behavior: 'smooth' }); });
+            if(eatwellLightboxModalEl) {
+                eatwellLightboxModalEl.addEventListener('click', (event) => { if (event.target === eatwellLightboxModalEl) eatwellCloseLightbox(); });
+            }
+            document.addEventListener('keydown', (event) => { if (event.key === "Escape" && eatwellLightboxModalEl && eatwellLightboxModalEl.classList.contains('visible')) eatwellCloseLightbox(); });
+
+            if (Object.keys(eatwellCurrentMenuData).length > 0) {
+                eatwellCurrentMainCategoryKey = Object.keys(eatwellCurrentMenuData)[0];
+                const mainCatData = eatwellCurrentMenuData[eatwellCurrentMainCategoryKey];
+                if (mainCatData && mainCatData.secondaryCategories && Object.keys(mainCatData.secondaryCategories).length > 0) {
+                    eatwellCurrentSecondaryCategoryKey = Object.keys(mainCatData.secondaryCategories)[0];
+                } else { eatwellCurrentSecondaryCategoryKey = null; }
+                eatwellSelectMainCategory(eatwellCurrentMainCategoryKey);
+            } else {
+                const textColor = getComputedStyle(document.documentElement).getPropertyValue('--eatwell-light-text-on-green').trim() || '#FFFFFF';
+                if(eatwellMainCategoriesNav) eatwellMainCategoriesNav.innerHTML = `<p style='color:${textColor}; text-align:center; width:100%; padding:10px;'>لا توجد فئات رئيسية.</p>`;
+                if(eatwellSecondaryCategoriesNavContainer) eatwellSecondaryCategoriesNavContainer.innerHTML = `<p style='color:${textColor}; text-align:center; width:100%; padding:10px;'>لا توجد فئات ثانوية.</p>`;
+                if(eatwellMenuItemsGrid) eatwellMenuItemsGrid.innerHTML = "<p style='text-align:center; width:100%; padding:20px;'>القائمة فارغة.</p>";
+            }
+        }
+        console.log("Main script block parsed."); // DEBUG: Confirm end of script block
+    </script>
+</body>
+</html>
